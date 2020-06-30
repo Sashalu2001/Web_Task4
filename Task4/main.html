@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8">
+    <link href="main.css" type="text/css" rel="stylesheet">
+    <title>Task4</title>
+
+    <script>
+
+        function Square()
+        {
+
+            let sa = Number(document.square.s_a.value),
+                sb = Number(document.square.s_b.value),
+                sh = Number(document.square.s_h.value),
+                sthis;
+
+            if ((sa <= 0) || (sb <= 0) || (sh <= 0)) {
+                document.square.s_this.value = "Error";
+            } else {
+                sthis = 0.5 * (sa + sb) / sh;
+                document.square.s_this.value = sthis;
+            }
+
+        }
+
+        function Summ_posl() {
+
+            let summ = 0,
+                x = Number(document.posl.x_posl.value),
+                a = 1, b = 1;
+
+            for (let i = 0; i < 14; i++) {
+                if (i > 1) {
+                    summ = summ + Math.abs(((Math.pow(x,a)) / b));
+                }
+                a = a + 4;
+                if (i == 0) b = b + 3; else b = b + 4;
+            }
+
+            document.posl.x_out.value = summ;
+
+        }
+
+        function Sort_mass() {
+
+            let b = new Array(5);
+
+            for (let i = 0; i < 5; i++) b[i] = new Array(7);
+
+            for (let i = 0; i < 5; i++) {
+
+                for (let j = 0; j < 7; j++) {
+
+                    b[i][j] = Number(document.getElementById("m" + String(i+1) + String(j+1)).value);
+
+                }
+
+            }
+
+            for (let j = 0; j < 7; j++) {
+
+                let temp = 0;
+
+                for (let i = 0; i < 5; i++) {
+
+                    for (let n = 0; n < 4 - i; n++) {
+
+                        if (b[n][j] > b[n + 1][j]) {
+                            temp = b[n][j];
+                            b[n][j] = b[n + 1][j];
+                            b[n + 1][j] = temp;
+                            document.getElementById("m" + String(n + 1) + String(j + 1)).value = b[n][j];
+                            document.getElementById("m" + String(n + 2) + String(j + 1)).value = b[n + 1][j];
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        function Matrix() {
+
+            function getRandomInt(min, max) {
+
+                return Math.floor(Math.random() * (max - min) ) + min;
+
+            }
+
+            function getArray(n) {
+
+                let a = new Array(n * n);
+
+                for (let i = 0; i < n * n; i++) {
+
+                    a[i] = getRandomInt(min, max);
+
+                }
+
+                return a;
+
+            }
+
+            function getResultArray(a) {
+
+                for (let i = 0; i < a.length; i++) {
+
+                    let temp = 0;
+
+                    for (let j = 0; j < a.length - i - 1; j++) {
+
+                        if (a[j] > a[j + 1]) {
+                            temp = a[j];
+                            a[j] = a[j + 1];
+                            a[j + 1] = temp;
+                        }
+
+                    }
+
+                }
+
+                return a;
+
+            }
+
+            let min = Number(document.getElementById("min").value);
+            let max = Number(document.getElementById("max").value);
+
+            let n = Number(document.getElementById("n").value);
+
+            let a = getArray(n);
+            let b = getResultArray(a);
+
+                function Create_table(n) {
+
+                    let body = document.body;
+                    let tbl = document.createElement('table');
+                    tbl.style.width = '50%';
+                    tbl.style.border = '1px solid';
+                    tbl.style.margin = '1vw';
+
+                    let k = 0;
+                    let c = n * n;
+                    let ch = 0;
+                    for (let i = 0; i < n; i++) {
+                        c = c - n;
+                        ch++;
+                        let tr = tbl.insertRow();
+                        if (ch % 2 === 1) {
+                            for (let j = c; j < n * n - k; j++) {
+                                let td = tr.insertCell();
+                                td.appendChild(document.createTextNode(b[j]));
+                                td.style.border = '1px solid';
+                                td.style.textAlign = 'center';
+                            }
+                        } else {
+                            for (let j = n * n - k - 1; j > c - 1; j--) {
+                                let td = tr.insertCell();
+                                td.appendChild(document.createTextNode(b[j]));
+                                td.style.border = '1px solid';
+                                td.style.textAlign = 'center';
+                            }
+                        }
+                        body.appendChild(tbl);
+                        k = k + n;
+                    }
+
+
+                }
+
+                Create_table(n);
+
+        }
+
+    </script>
+
+</head>
+
+<body>
+
+<h3 style="margin: 1vw">Площадь трапеции</h3>
+
+<form name="square">
+
+    <table style="margin: 1vw">
+        <tr><td>Длина нижней грани:</td>
+            <td><input name="s_a" size="3"></td></tr>
+        <tr><td>Длина верхней грани:</td>
+            <td><input name="s_b" size="3"></td></tr>
+        <tr><td>Длина высоты:</td>
+            <td><input name="s_h" size="3"></td></tr>
+        <tr><td>Результат:</td>
+            <td><input type="text" name="s_this" size="3"></td></tr>
+        <tr>
+            <td><input type="button" value="Вычислить" onClick="Square()"></td>
+        </tr>
+    </table>
+
+</form>
+
+<form name="posl">
+
+    <h4 style="margin-left: 1vw; margin-top: 4vw">Вычислить сумму абсолютных величин элементов с 3-его по 15-тый в последовательности: x, x^5/4, x^9/8, x^13/12, ...</h4>
+
+    <table style="margin: 1vw">
+        <tr>
+            <td>Введите x:</td>
+            <td><input name="x_posl" size="3"></td>
+        </tr>
+        <tr>
+            <td>Результат:</td>
+            <td><input type="text" name="x_out" size="16"></td>
+        </tr>
+        <tr>
+            <td><input type="button" value="Вычислить" onClick="Summ_posl()"></td>
+        </tr>
+    </table>
+
+</form>
+
+<form name="mass">
+
+    <h4 style="margin-left: 1vw; margin-top: 4vw">Расположить элементы в каждом столбце в порядке возрастания</h4>
+
+    <table style="margin: 1vw">
+        <tr>
+            <td><input id="m11" size="1"></td> <td><input id="m12" size="1"> <input id="m13" size="1"> <input id="m14" size="1"> <input id="m15" size="1"> <input id="m16" size="1"> <input id="m17" size="1"></td>
+        </tr>
+        <tr>
+            <td><input id="m21" size="1"></td> <td><input id="m22" size="1"> <input id="m23" size="1"> <input id="m24" size="1"> <input id="m25" size="1"> <input id="m26" size="1"> <input id="m27" size="1"></td>
+        </tr>
+        <tr>
+            <td><input id="m31" size="1"></td> <td><input id="m32" size="1"> <input id="m33" size="1"> <input id="m34" size="1"> <input id="m35" size="1"> <input id="m36" size="1"> <input id="m37" size="1"></td>
+        </tr>
+        <tr>
+            <td><input id="m41" size="1"></td> <td><input id="m42" size="1"> <input id="m43" size="1"> <input id="m44" size="1"> <input id="m45" size="1"> <input id="m46" size="1"> <input id="m47" size="1"></td>
+        </tr>
+        <tr>
+            <td><input id="m51" size="1"></td> <td><input id="m52" size="1"> <input id="m53" size="1"> <input id="m54" size="1"> <input id="m55" size="1"> <input id="m56" size="1"> <input id="m57" size="1"></td>
+        </tr>
+    </table>
+    <input type="button" value="Расположить" onClick="Sort_mass()" style="margin-left: 1vw">
+
+</form>
+
+<form name="matrix">
+
+    <h4 style="margin-left: 1vw; margin-top: 4vw">Построить квадратную матрицу по схеме №3:</h4>
+
+    <table style="margin: 1vw">
+        <tr><td>Размерности: </td>
+        <td><input id="n" size="3"></td>
+        </tr>
+        <tr><td>В интервале чисел от </td>
+        <td><input id="min" size="3"> до </td>
+            <td><input id="max" size="3"></td>
+        </tr>
+        <tr>
+            <td><input type="button" value="Построить" onClick="Matrix()"></td>
+        </tr>
+    </table>
+
+</form>
+
+</body>
